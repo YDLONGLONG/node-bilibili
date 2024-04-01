@@ -17,14 +17,14 @@ require('./db/connect')
  app.use(compression());
  */
 //跨域访问
+// app.use(cors({
+//   origin: ['http://82.157.48.201/','http://82.157.48.201:8880', 'http://82.157.48.201:8881'],
+//   credentials: true
+// }))
 app.use(cors({
-  origin: ['http://localhost','http://localhost:80', 'http://localhost:81'],
+  origin: ['http://localhost','http://localhost:8880', 'http://localhost:8881'],
   credentials: true
 }))
-// {
-//   origin: ['http://localhost','http://localhost:80', 'http://localhost:81'],
-//   credentials: true
-// }
 //session
 app.use(
   session({
@@ -54,7 +54,7 @@ app.use('/notice', require('./router/noticeRouter'))
 app.use('/trend', require('./router/trendRouter'))
 app.use('/chat', require('./router/chatRouter'))
 app.use('/ban', require('./router/banRouter'))
-//app.use('/qrCode', require('./router/qrRouter'))
+app.use('/qrCode', require('./router/qrRouter'))
 //管理员路由
 app.use('/admin', (req, res, next) => {
   // if (req.url === '/login' || req.session.login) next()

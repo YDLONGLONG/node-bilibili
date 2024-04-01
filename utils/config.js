@@ -1,5 +1,5 @@
 const config = {
-  BASE_URL: 'http://localhost:3000',
+  BASE_URL: 'http://82.157.48.201:3000',
   // 默认昵称
   DEFAULT_NICK: '普通用户',
   //数据库存入用户默认签名
