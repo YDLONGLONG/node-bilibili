@@ -19,6 +19,7 @@ router.get('/play', async (req, res) => {
   await Video.updateOne({_id}, {playCount})
   res.json(jsonRes(0, '成功'))
 })
+//获取视频
 router.get('/page', async (req, res) => {
   let {page, type} = req.query
   let videos, count
@@ -31,6 +32,7 @@ router.get('/page', async (req, res) => {
   }
   res.json(jsonRes(0, '查询成功', {videos, count}))
 })
+//获取热门视频
 router.get('/hot', async (req, res) => {
   let data = await Video.find(null, ['title', 'imgUrl','isAdopt']).sort('-playCount').limit(4)
   res.json(jsonRes(0, '查询成功', data))
@@ -58,10 +60,12 @@ router.get('/byId', async (req, res) => {
   let otherVideos = await Video.find({isAdopt:true}).populate('author', 'nick').limit(4).skip(skip)
   res.json(jsonRes(0, '查询成功', {video: video, otherVideos, danmuCount}))
 })
+//排行榜
 router.get('/top', async (req, res) => {
   let data = await Video.find().sort('-playCount').limit(20).populate('author', ['nick', 'headUrl', 'sign'])
   res.json(jsonRes(0, '', data))
 })
+//点赞
 router.post('/zan', async (req, res) => {
   let {_id, author} = req.body
   let video = await Video.findById(_id)
@@ -121,6 +125,7 @@ router.get('/searchtrend', async (req, res) => {
   let trends = await Trend.find({content: reg})
   res.json(jsonRes(0, '搜索成功', {trends}))
 })
+//获取用户视频
 router.get('/userId', async (req, res) => {
   let {author, page, keyWord, sortBy} = req.query
   if (!author) return res.json(jsonRes(-1, '无用户id'))
@@ -134,6 +139,7 @@ router.get('/userId', async (req, res) => {
   }
   res.json(jsonRes(0, '', {videos, count}))
 })
+//删除视频
 router.post('/delete', async (req, res) => {
   let {_id} = req.body
   if (!_id) return res.json(jsonRes(-1, '无id'))
