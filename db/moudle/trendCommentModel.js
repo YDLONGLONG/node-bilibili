@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 let trendCommentSchema = new mongoose.Schema({
-  trend: {type: mongoose.Types.ObjectId, index: true},
+  trend: {type: mongoose.Types.ObjectId, index: true, ref: 'trend'},
   commentator: {type: mongoose.Types.ObjectId, ref: 'user'},
   content: String,
   date: Number,

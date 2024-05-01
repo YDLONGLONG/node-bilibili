@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const jsonRes = require('../utils/jsonRes')
 const Chat = require('../db/moudle/chatModel')
+const User = require('../db/moudle/userModel')
 
 async function findPage (userid,friendid,page) {
     let chatCount = await Chat.countDocuments({userid: userid,friendid:friendid})
@@ -33,6 +34,24 @@ router.get('/getunread', async (req, res) => {
     if (!userid) return res.json(jsonRes(-1, '无ID'))
     let count = await Chat.countDocuments({friendid: userid,state:1})
     res.json(jsonRes(0, '', count))
+})
+//获取未读消息人数列表
+router.get('/getunreadlist', async (req, res) => {
+    let {userid} = req.query
+    if (!userid) return res.json(jsonRes(-1, '无ID'))
+    let result = await Chat.find({friendid: userid})
+    let attentionList = await User.findById(userid, 'attentionList')
+    //循环遍历数组userid是否在关注列表里，如果有则在result中删除该数据,并且返回去重后的数组
+    result = result.filter(item => !attentionList.attentionList.includes(item.userid))
+    const uniqueMap = {};
+    const uniqueArray = [];
+    result.forEach(item => {
+        if (!uniqueMap[item.userid]) {
+            uniqueMap[item.userid] = true;
+            uniqueArray.push(item);
+        }
+    });
+    res.json(jsonRes(0, '', uniqueArray))
 })
 //一对一消息状态修改
 router.post('/setunread', async (req, res) => {

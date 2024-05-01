@@ -66,6 +66,9 @@ router.post('/reg', async (req, res) => {
   try {
     password = hmac(password)
     await User.insertMany({email, password})
+
+    let user = await User.findOne({email})
+    await UserInfo.insertMany({userid: user._id})
     res.json(jsonRes(0, '注册成功'))
   } catch (e) {
     res.json(jsonRes(-1, '邮箱已注册'))
